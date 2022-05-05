@@ -3,11 +3,11 @@ It's an API written in Go to show message with the ability to change the message
 and see the number of people who saw it before 
 
 ## Features
-1- I Used gorilla/mux laibrary
-2- Deploy it by Elastic Beanstalk AWS
-3- Use HTTPS instad of http 
+1. I Used gorilla/mux laibrary
+2. Deploy it by Elastic Beanstalk AWS
+3. Use HTTPS instad of http 
 
-## CLI command to create cerificate and key 
+## CLI command to create cerificate and key for HTTPS protocol
 ### certificate signing request (CSR):
  This command generates a localhost.key file which is the private key and localhost.csr
  which is the certificate signing request that contains the public key.
