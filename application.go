@@ -66,8 +66,10 @@ func main() {
     defer f.Close()
     log.SetOutput(f)
 
+	// http.ListenAndServe(":"+port,r) 
+
     fmt.Printf("Starting server at port :"+port)
-	err :=http.ListenAndServe(":"+port,r) 
+	err :=http.ListenAndServeTLS(":"+port,"localhost.crt","localhost.key",r) 
 	if err != nil {
 		log.Fatal(err)
 	}
