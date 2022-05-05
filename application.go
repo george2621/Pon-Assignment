@@ -29,7 +29,11 @@ func showMessage(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 		http.Error(w, "Error encoding response object", http.StatusInternalServerError)
 	}
-	json.NewEncoder(w).Encode(called)
+	if err := json.NewEncoder(w).Encode(called); err != nil {
+		fmt.Println(err)
+		http.Error(w, "Error encoding response object", http.StatusInternalServerError)
+	}
+	
 	atomic.AddUint64(&called, 1)
 }
 
