@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -26,15 +25,17 @@ func showMessage(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := json.NewEncoder(w).Encode(msg.Msg); err != nil {
-		fmt.Println(err)
+		log.Print(err)
 		http.Error(w, "Error encoding response object", http.StatusInternalServerError)
 	}
 	if err := json.NewEncoder(w).Encode(called); err != nil {
-		fmt.Println(err)
+		log.Print(err)
 		http.Error(w, "Error encoding response object", http.StatusInternalServerError)
 	}
 	
 	atomic.AddUint64(&called, 1)
+	log.Print("Show message")
+
 }
 
 func updateMessage(w http.ResponseWriter, r *http.Request) {
@@ -45,15 +46,17 @@ func updateMessage(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := json.NewDecoder(r.Body).Decode(&msg); err != nil {
-		fmt.Println(err)
+		log.Print(err)
 		http.Error(w, "Error decoidng response object", http.StatusBadRequest)
 		return
 	}
 
 	if err := json.NewEncoder(w).Encode(msg.Msg); err != nil {
-		fmt.Println(err)
+		log.Print(err)
 		http.Error(w, "Error encoding response object", http.StatusInternalServerError)
 	}
+	log.Print("Message has been updated")
+
 }
 
 func main() {
@@ -66,13 +69,14 @@ func main() {
 	r.HandleFunc("/", showMessage).Methods("GET")
 	r.HandleFunc("/", updateMessage).Methods("PUT")
 
-	f, _ := os.Create("/var/log/golang/golang-server.log")
+	f, _ := os.Create("golang-server.log")
 	defer f.Close()
 	log.SetOutput(f)
 
-	fmt.Printf("Starting server at port :" + port)
 	err := http.ListenAndServeTLS(":"+port, "localhost.crt", "localhost.key", r)
 	if err != nil {
-		log.Fatal(err)
+		log.Print(err)
+	}else {
+		log.Print("Server Started on port: "+port)
 	}
 }
